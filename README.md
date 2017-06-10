@@ -9,4 +9,6 @@ Markov Chain Monte Carlo convergence diagnostics in Julia.
 
 ## Bibliography
 
-Gelman, A., Carlin, J. B., Stern, H. S., & Rubin, D. B. (2014). Bayesian data analysis (3rd edition). Chapman & Hall/CRC.
+Gelman, A., Carlin, J. B., Stern, H. S., & Rubin, D. B. (2013). Bayesian data analysis (3rd edition). Chapman & Hall/CRC.
+
+Stan Development Team. (2017). Stan Modeling Language Users Guide and Reference Manual, Version 2.15.0. http://mc-stan.org

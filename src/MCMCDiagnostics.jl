@@ -2,88 +2,76 @@ module MCMCDiagnostics
 
 using StatsBase
 
-export convergence_statistics, effective_sample_size, potential_scale_reduction
+export ess_factor_estimate, effective_sample_size, potential_scale_reduction
 
 """
-Summary statistics from (part of) a chain for convergence diagnostics.
+Estimate of lag-`k` autocorrelation of `x` from a variogram. `v` is
+the variance of `x`, used when supplied.
+
+See Gelman et al (2013), section 11.4.
 """
-struct ConvergenceStatistics{T <: AbstractFloat}
-    "Number of draws."
-    sample_length::Int
-    "Sample mean."
-    sample_mean::T
-    "Sample variance."
-    sample_var::T
-    "Scale factor for effective sample size, ∈ [0,1]."
-    ess_factor::T
-    """Last lag used for calculating scaling factor for effective
-    sample size. For diagnostic purposes only."""
-    last_lag::Int
+function autocorrelation(x, k, v = var(x))
+    x1 = @view(x[1:(end-k)])
+    x2 = @view(x[(1+k):end])
+    V = sum((x1 .- x2).^2)/length(x1)
+    1 - V / (2*v)
 end
 
-Base.length(stat::ConvergenceStatistics) = stat.sample_length
-Base.mean(stat::ConvergenceStatistics) = stat.sample_mean
-Base.var(stat::ConvergenceStatistics) = stat.sample_var
-
 """
-Calculate summary chain statistics (as a `ConvergenceStatistics` object) for
-vector of scalar draws.
+Estimate for effective sample size factor.
 
-# Recommended usage
+Return `τ, K` where `τ` is estimated effective sample size / sample
+size, and `K` is the last lag used for autocorrelation estimation.
 
-1. Use multiple (3-5) chains, started from overdispersed initial
-points.
+# Notes
 
-2. After discarding burn-in, split the remaining sample in half.
+See Gelman et al (2013), section 11.4.
 
-3. Calculate the chain statistics for each.
-
-4. Calculate [`potential_chain_reduction`](@ref) and
-[`effective_sample_size`](@ref) using all the chains.
+Some implementations (eg Stan) use FFT for autocorrelations, which
+yields the whole spectrum. In practice, a <50-100 lags are usually
+sufficient for reasonable samplers, so the "naive" version may be more
+efficient.
 """
-function convergence_statistics{T}(x::AbstractVector{T})
+function ess_factor_estimate(x, v = var(x))
     N = length(x)
-    m, v = mean_and_var(x, corrected = false)
-    z = (x-m)/√v # normalize by variance for better numerical stability
-    autocov(k) = dot(@view(z[1:(N-k)]), @view(z[(1+k):N])) / (N-k)
-    invscale = 1 + 2*autocov(1)
-    last_lag = 2
-    while last_lag < N-2
-        increment = autocov(last_lag) + autocov(last_lag + 1)
-        if increment < 0
+    τ_inv = 1 + 2*autocorrelation(x, 1, v)
+    K = 2
+    while K < N-2
+        Δ = autocorrelation(x, K, v) + autocorrelation(x, K + 1, v)
+        if Δ < 0
             break
         else
-            invscale += 2*increment
-            last_lag += 2
+            τ_inv += 2*Δ
+            K += 2
         end
     end
-    ConvergenceStatistics(N, m, v, 1 / invscale, last_lag)
+    1 / τ_inv, K
 end
 
 """
 Effective sample size.
 
-
-
 Estimated from autocorrelations. See Gelman et al (2013), section 11.4.
+
+When the variance `v` is supplied, is saves some calculation time.
 """
-effective_sample_size(stat::ConvergenceStatistics) = stat.sample_length * stat.ess_factor
-
-effective_sample_size(stats::ConvergenceStatistics...) = sum(effective_sample_size.(stats))
-
-effective_sample_size(x) = effective_sample_size(convergence_statistics(x))
+function effective_sample_size(x, v = var(x))
+    τ, _ = ess_factor_estimate(x, v)
+    τ * length(x)
+end
 
 """
 Potential scale reduction factor (for possibly ragged chains).
 
-Always ≥ 1 by construction, but values much larger than 1 (say 1.05)
-indicate poor mixing.
+Also known as R̂. Always ≥ 1 by construction, but values much larger
+than 1 (say 1.05) indicate poor mixing.
 
 Uses formula from Stan Development Team (2017), section 28.3.
 """
-function potential_scale_reduction(stats_or_chains...)
-    W = mean(var.(stats_or_chains))
-    B = var(mean.(stats_or_chains))
+function potential_scale_reduction(chains...)
+    mvs = mean_and_var.(chains)
+    W = mean(last.(mvs))
+    B = var(first.(mvs))
     √(1+B/W)
 end
 

@@ -2,12 +2,12 @@ module MCMCDiagnostics
 
 using StatsBase
 
-export chain_statistics, effective_sample_size, potential_scale_reduction
+export convergence_statistics, effective_sample_size, potential_scale_reduction
 
 """
 Summary statistics from (part of) a chain for convergence diagnostics.
 """
-struct ChainStatistics{T <: AbstractFloat}
+struct ConvergenceStatistics{T <: AbstractFloat}
     "Number of draws."
     sample_length::Int
     "Sample mean."
@@ -21,8 +21,12 @@ struct ChainStatistics{T <: AbstractFloat}
     last_lag::Int
 end
 
+Base.length(stat::ConvergenceStatistics) = stat.sample_length
+Base.mean(stat::ConvergenceStatistics) = stat.sample_mean
+Base.var(stat::ConvergenceStatistics) = stat.sample_var
+
 """
-Calculate summary chain statistics (as a `ChainStatistics` object) for
+Calculate summary chain statistics (as a `ConvergenceStatistics` object) for
 vector of scalar draws.
 
 # Recommended usage
@@ -37,7 +41,7 @@ points.
 4. Calculate [`potential_chain_reduction`](@ref) and
 [`effective_sample_size`](@ref) using all the chains.
 """
-function chain_statistics{T}(x::AbstractVector{T})
+function convergence_statistics{T}(x::AbstractVector{T})
     N = length(x)
     m, v = mean_and_var(x, corrected = false)
     z = (x-m)/√v # normalize by variance for better numerical stability
@@ -53,15 +57,21 @@ function chain_statistics{T}(x::AbstractVector{T})
             last_lag += 2
         end
     end
-    ChainStatistics(N, m, v, 1 / invscale, last_lag)
+    ConvergenceStatistics(N, m, v, 1 / invscale, last_lag)
 end
 
-"Effective sample size.
+"""
+Effective sample size.
 
-Estimated from autocorrelations. See Gelman et al (2013), section 11.4."
-effective_sample_size(stat::ChainStatistics) = stat.sample_length * stat.ess_factor
 
-effective_sample_size(stats::ChainStatistics...) = sum(effective_sample_size.(stats))
+
+Estimated from autocorrelations. See Gelman et al (2013), section 11.4.
+"""
+effective_sample_size(stat::ConvergenceStatistics) = stat.sample_length * stat.ess_factor
+
+effective_sample_size(stats::ConvergenceStatistics...) = sum(effective_sample_size.(stats))
+
+effective_sample_size(x) = effective_sample_size(convergence_statistics(x))
 
 """
 Potential scale reduction factor (for possibly ragged chains).
@@ -71,9 +81,9 @@ indicate poor mixing.
 
 Uses formula from Stan Development Team (2017), section 28.3.
 """
-function potential_scale_reduction(stats::ChainStatistics...)
-    W = mean(stat.sample_var for stat in stats)
-    B = var(stat.sample_mean for stat in stats)
+function potential_scale_reduction(stats_or_chains...)
+    W = mean(var.(stats_or_chains))
+    B = var(mean.(stats_or_chains))
     √(1+B/W)
 end
 

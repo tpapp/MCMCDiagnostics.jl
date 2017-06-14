@@ -1,13 +1,23 @@
 using MCMCDiagnostics
 using Base.Test
 
-srand(UInt32[0x3d50884f, 0xd6560f94, 0x6c04ab37, 0xb1c52878]) # consistent testing
+# consistent testing
+srand(UInt32[0x3d50884f, 0xd6560f94, 0x6c04ab37, 0xb1c52878])
 
 @testset "IID samples" begin
     chains = [randn(1000) for _ in 1:10]
     @test 9900 ≤ effective_sample_size(vcat(chains...)) ≤ 10100
-
     @test 1 ≤ potential_scale_reduction(chains...) ≤ 1.001
+end
+
+@testset "IID dispersed ragged PSRF" begin
+    μs = -10:1:10
+    chains = [randn(1000)*rand(1:10)+μ for μ in μs]
+    B = var(μs)
+    W = mean(var.(chains))
+    expected_R̂ = √(1+B/W)
+    R̂ = potential_scale_reduction(chains...)
+    @test 0.99 ≤ (R̂/expected_R̂) ≤ 1.01
 end
 
 @testset "AR(1)" begin

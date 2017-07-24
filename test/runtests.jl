@@ -47,4 +47,7 @@ end
     for ρ in linspace(0.5,0.9,10)
         @test 0.95 ≤ rel(ρ,1000000) ≤ 1.05
     end
+    for ρ in linspace(-0.5,-0.9,10) # testing cap, since for ρ < 0, ESS ≥ N
+        effective_sample_size(simulate_ar1(ρ, 1000, σ=randn()^2+0.5)) == 1000
+    end
 end

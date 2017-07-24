@@ -29,6 +29,8 @@ Return `τ, K` where `τ` is estimated effective sample size / sample size, and 
 
 See Gelman et al (2013), section 11.4.
 
+τ is capped at 1, this is relevant when the sample has large negative autocorrelation (happens with HMC/NUTS).
+
 Some implementations (eg Stan) use FFT for autocorrelations, which yields the whole spectrum. In practice, a <50-100 lags are usually sufficient for reasonable samplers, so the "naive" version may be more efficient.
 """
 function ess_factor_estimate(x, v = var(x))
@@ -44,7 +46,7 @@ function ess_factor_estimate(x, v = var(x))
             K += 2
         end
     end
-    1 / τ_inv, K
+    min(1 / τ_inv, one(τ_inv)), K
 end
 
 """

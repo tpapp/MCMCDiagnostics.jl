@@ -7,7 +7,8 @@ export ess_factor_estimate, effective_sample_size, potential_scale_reduction
 """
     autocorrelation(x, k, v = var(x))
 
-Estimate of lag-`k` autocorrelation of `x` from a variogram. `v` is the variance of `x`, used when supplied.
+Estimate of lag-`k` autocorrelation of `x` from a variogram. `v` is the variance
+of `x`, used when supplied.
 
 See Gelman et al (2013), section 11.4.
 """
@@ -23,15 +24,19 @@ end
 
 Estimate for effective sample size factor.
 
-Return `τ, K` where `τ` is estimated effective sample size / sample size, and `K` is the last lag used for autocorrelation estimation.
+Return `τ, K` where `τ` is estimated effective sample size / sample size, and
+`K` is the last lag used for autocorrelation estimation.
 
 # Notes
 
 See Gelman et al (2013), section 11.4.
 
-τ is capped at 1, this is relevant when the sample has large negative autocorrelation (happens with HMC/NUTS).
+`τ` is capped at 1, this is relevant when the sample has large negative
+autocorrelation (happens with HMC/NUTS).
 
-Some implementations (eg Stan) use FFT for autocorrelations, which yields the whole spectrum. In practice, a <50-100 lags are usually sufficient for reasonable samplers, so the "naive" version may be more efficient.
+Some implementations (eg Stan) use FFT for autocorrelations, which yields the
+whole spectrum. In practice, a <50-100 lags are usually sufficient for
+reasonable samplers, so the “naive” version may be more efficient.
 """
 function ess_factor_estimate(x, v = var(x))
     N = length(x)
@@ -56,7 +61,7 @@ Effective sample size of vector `x`.
 
 Estimated from autocorrelations. See Gelman et al (2013), section 11.4.
 
-When the variance `v` is supplied, is saves some calculation time.
+When the variance `v` is supplied, it saves some calculation time.
 """
 function effective_sample_size(x, v = var(x))
     τ, _ = ess_factor_estimate(x, v)
@@ -68,7 +73,8 @@ end
 
 Potential scale reduction factor (for possibly ragged chains).
 
-Also known as R̂. Always ≥ 1 by construction, but values much larger than 1 (say 1.05) indicate poor mixing.
+Also known as R̂. Always ≥ 1 by construction, but values much larger than 1 (say
+1.05) indicate poor mixing.
 
 Uses formula from Stan Development Team (2017), section 28.3.
 """

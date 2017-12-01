@@ -11,7 +11,8 @@ Markov Chain Monte Carlo convergence diagnostics in Julia.
 
 This package contains two very useful diagnostics for Markov Chain Monte Carlo:
 
-1. `potential_scale_reduction(chains...)`, which estimates the potential scale reduction factor, also known as R̂, for multiple scalar chains,
+1. `potential_scale_reduction(chains...)`, which estimates the potential scale reduction factor, also known as `Rhat`, for multiple scalar chains,
+
 2. `effective_sample_size(chain)`, which calculates the effective sample size for scalar chains.
 
 These are intended as *building blocks*, to be used by other libraries, and were organized into a separate library for testing and DRY.

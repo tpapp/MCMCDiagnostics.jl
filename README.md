@@ -17,6 +17,20 @@ This package contains two very useful diagnostics for Markov Chain Monte Carlo:
 
 These are intended as *building blocks*, to be used by other libraries, and were organized into a separate library for testing and DRY.
 
+## Installation
+
+The package is not (yet) registered. If you find it useful and want me to register it, please open an issue. In the meantime, use
+
+```julia
+Pkg.clone("https://github.com/tpapp/MCMCDiagnostics.jl.git")
+```
+
+to install it.
+
+## Related
+
+You may find my other packages for MCMC interesting. See the documentation of [DynamicHMC.jl](https://github.com/tpapp/DynamicHMC.jl) for details.
+
 ## Bibliography
 
 Gelman, A., & Rubin, D. B. (1992). Inference from iterative simulation using multiple sequences. Statistical science, 457-472.

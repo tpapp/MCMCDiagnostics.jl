@@ -17,6 +17,12 @@ This package contains two very useful diagnostics for Markov Chain Monte Carlo:
 
 These are intended as *building blocks*, to be used by other libraries, and were organized into a separate library for testing and DRY.
 
+Since the module does not export anything, **you have to import** the function names to use them, eg:
+```julia
+using MCMCDiagnostics:
+    ess_factor_estimate, effective_sample_size, potential_scale_reduction
+```
+
 ## Installation
 
 The package is not (yet) registered. If you find it useful and want me to register it, please open an issue. In the meantime, use

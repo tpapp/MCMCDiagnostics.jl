@@ -19,13 +19,11 @@ These are intended as *building blocks*, to be used by other libraries, and were
 
 ## Installation
 
-The package is not (yet) registered. If you find it useful and want me to register it, please open an issue. In the meantime, use
+The package is registered. You can install it with
 
 ```julia
-Pkg.clone("https://github.com/tpapp/MCMCDiagnostics.jl.git")
+Pkg.add("MCMCDiagnostics")
 ```
-
-to install it.
 
 ## Related
 

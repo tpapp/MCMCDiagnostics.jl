@@ -3,6 +3,8 @@ module MCMCDiagnostics
 
 using StatsBase: mean_and_var
 
+export ess_factor_estimate, effective_sample_size, potential_scale_reduction
+
 """
     autocorrelation(x, k, v = var(x))
 

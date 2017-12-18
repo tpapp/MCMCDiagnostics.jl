@@ -1,5 +1,4 @@
-using MCMCDiagnostics:
-    ess_factor_estimate, effective_sample_size, potential_scale_reduction
+using MCMCDiagnostics
 
 using Base.Test
 

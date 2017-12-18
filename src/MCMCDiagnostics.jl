@@ -1,8 +1,7 @@
+__precompile__()
 module MCMCDiagnostics
 
-using StatsBase
-
-export ess_factor_estimate, effective_sample_size, potential_scale_reduction
+using StatsBase: mean_and_var
 
 """
     autocorrelation(x, k, v = var(x))

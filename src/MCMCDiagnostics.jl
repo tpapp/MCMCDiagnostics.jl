@@ -13,7 +13,7 @@ of `x`, used when supplied.
 
 See Gelman et al (2013), section 11.4.
 """
-function autocorrelation(x, k, v = var(x))
+function autocorrelation(x::AbstractVector, k::Integer, v = var(x))
     x1 = @view(x[1:(end-k)])
     x2 = @view(x[(1+k):end])
     V = sum((x1 .- x2).^2) / length(x1)
@@ -39,7 +39,7 @@ Some implementations (eg Stan) use FFT for autocorrelations, which yields the
 whole spectrum. In practice, a <50-100 lags are usually sufficient for
 reasonable samplers, so the “naive” version may be more efficient.
 """
-function ess_factor_estimate(x, v = var(x))
+function ess_factor_estimate(x::AbstractVector, v = var(x))
     N = length(x)
     τ_inv = 1 + 2 * autocorrelation(x, 1, v)
     K = 2
@@ -64,7 +64,7 @@ Estimated from autocorrelations. See Gelman et al (2013), section 11.4.
 
 When the variance `v` is supplied, it saves some calculation time.
 """
-function effective_sample_size(x, v = var(x))
+function effective_sample_size(x::AbstractVector, v = var(x))
     τ, _ = ess_factor_estimate(x, v)
     τ * length(x)
 end
@@ -79,7 +79,7 @@ Also known as R̂. Always ≥ 1 by construction, but values much larger than 1 (
 
 Uses formula from Stan Development Team (2017), section 28.3.
 """
-function potential_scale_reduction(chains...)
+function potential_scale_reduction(chains::AbstractVector...)
     mvs = mean_and_var.(chains)
     W = mean(last.(mvs))
     B = var(first.(mvs))

@@ -1,9 +1,12 @@
 using MCMCDiagnostics
 
+using StatsBase: var
+
+# TODO: change/remove when dropping support for v0.7
 using Compat
 using Compat.Test
 using Compat.Random: rand, randn, srand
-using StatsBase: var
+range = Compat.range
 
 # consistent testing
 srand(UInt32[0x3d50884f, 0xd6560f94, 0x6c04ab37, 0xb1c52878])

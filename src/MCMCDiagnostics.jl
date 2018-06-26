@@ -1,7 +1,7 @@
 __precompile__()
 module MCMCDiagnostics
 
-using StatsBase: mean_and_var
+using StatsBase: mean_and_var, var
 
 export ess_factor_estimate, effective_sample_size, potential_scale_reduction
 

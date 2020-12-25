@@ -9,7 +9,7 @@ Random.seed!(UInt32[0x3d50884f, 0xd6560f94, 0x6c04ab37, 0xb1c52878])
 
 @testset "IID samples" begin
     chains = [randn(1000) for _ in 1:10]
-    @test 9900 ≤ effective_sample_size(vcat(chains...)) ≤ 10100
+    @test 9800 ≤ effective_sample_size(vcat(chains...)) ≤ 10100
     @test 1 ≤ potential_scale_reduction(chains...) ≤ 1.001
 end
 

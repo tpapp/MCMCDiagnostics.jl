@@ -1,12 +1,26 @@
-# MCMCDiagnostics
+# MCMCDiagnostics.jl
 
 Markov Chain Monte Carlo convergence diagnostics in Julia.
+<!-- Tidyverse lifecycle badges, see https://www.tidyverse.org/lifecycle/ Uncomment or delete as needed. -->
+![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)<!--
+![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)
+![lifecycle](https://img.shields.io/badge/lifecycle-stable-green.svg)
+![lifecycle](https://img.shields.io/badge/lifecycle-retired-orange.svg)
+![lifecycle](https://img.shields.io/badge/lifecycle-archived-red.svg)
+![lifecycle](https://img.shields.io/badge/lifecycle-dormant-blue.svg) -->
+[![build](https://github.com/tpapp/MCMCDiagnostics.jl/workflows/CI/badge.svg)](https://github.com/tpapp/MCMCDiagnostics.jl/actions?query=workflow%3ACI)
 
-![Lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)
-[![Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.](http://www.repostatus.org/badges/latest/wip.svg)](http://www.repostatus.org/#wip)
-[![Build Status](https://travis-ci.org/tpapp/MCMCDiagnostics.jl.svg?branch=master)](https://travis-ci.org/tpapp/MCMCDiagnostics.jl)
-[![Coverage Status](https://coveralls.io/repos/tpapp/MCMCDiagnostics.jl/badge.svg?branch=master&service=github)](https://coveralls.io/github/tpapp/MCMCDiagnostics.jl?branch=master)
+<!-- travis-ci.com badge, uncomment or delete as needed, depending on whether you are using that service. -->
+<!-- [![Build Status](https://travis-ci.com/tpapp/MCMCDiagnostics.jl.svg?branch=master)](https://travis-ci.com/tpapp/MCMCDiagnostics.jl) -->
+
+<!-- Coverage badge on codecov.io, which is used by default. -->
 [![codecov.io](http://codecov.io/github/tpapp/MCMCDiagnostics.jl/coverage.svg?branch=master)](http://codecov.io/github/tpapp/MCMCDiagnostics.jl?branch=master)
+
+<!-- Documentation -- uncomment or delete as needed -->
+<!--
+[![Documentation](https://img.shields.io/badge/docs-stable-blue.svg)](https://tpapp.github.io/MCMCDiagnostics.jl/stable)
+[![Documentation](https://img.shields.io/badge/docs-master-blue.svg)](https://tpapp.github.io/MCMCDiagnostics.jl/dev)
+-->
 
 ## Overview
 

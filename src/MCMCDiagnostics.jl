@@ -1,5 +1,13 @@
 module MCMCDiagnostics
 
+function __init__()
+    @warn("""
+          MCMCDiagnostics.jl has been deprecated in favor of MCMCDiagnosticTools.jl.
+          (https://github.com/TuringLang/MCMCDiagnosticTools.jl/) and is no longer
+          maintained.
+          """)
+end
+
 using Statistics: mean, var
 using StatsBase: mean_and_var
 

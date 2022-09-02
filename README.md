@@ -1,5 +1,7 @@
 # MCMCDiagnostics.jl
 
+**MCMCDiagnostics.jl has been deprecated** in favor of [MCMCDiagnosticTools.jl](https://github.com/TuringLang/MCMCDiagnosticTools.jl/) and is no longer maintained.
+
 Markov Chain Monte Carlo convergence diagnostics in Julia.
 <!-- Tidyverse lifecycle badges, see https://www.tidyverse.org/lifecycle/ Uncomment or delete as needed. -->
 ![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)<!--

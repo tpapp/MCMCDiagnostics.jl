@@ -48,11 +48,11 @@ end
     end
 
     for ρ in range(0.1; length = 10, stop = 0.4)
-        @test 0.95 ≤ rel(ρ,100000) ≤ 1.05
+        @test 0.90 ≤ rel(ρ,100000) ≤ 1.05
     end
 
     for ρ in range(0.5; length = 10, stop = 0.9)
-        @test 0.95 ≤ rel(ρ,1000000) ≤ 1.05
+        @test 0.90 ≤ rel(ρ,1000000) ≤ 1.05
     end
 
     # testing cap, since for ρ < 0, ESS ≥ N
